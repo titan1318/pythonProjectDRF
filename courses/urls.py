@@ -6,6 +6,7 @@ from .views import LessonListCreateView, LessonRetrieveUpdateDestroyView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from .views import PaymentViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -17,11 +18,14 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+# Основной роутер
 router = DefaultRouter()
+router.register(r'payments', PaymentViewSet, basename='payment')  # Регистрация PaymentViewSet
 router.register(r'courses', CourseViewSet, basename='course')
 router.register(r'ratings', RatingViewSet, basename='rating')
 router.register(r'lessons', LessonViewSet, basename='lesson')
 
+# Вложенный роутер для уроков в курсах
 courses_router = NestedSimpleRouter(router, r'courses', lookup='course')
 courses_router.register(r'lessons', LessonViewSet, basename='course-lessons')
 

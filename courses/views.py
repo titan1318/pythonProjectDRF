@@ -6,7 +6,17 @@ from django.db.models import Count, Avg
 from .models import Course, Lesson, Rating
 from .permissions import IsAdminOrReadOnly
 from rest_framework.exceptions import NotFound
+from rest_framework import viewsets
+from .models import Payment
+from .serializers import PaymentSerializer
+from rest_framework.permissions import IsAuthenticated
 
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated]
+    filterset_fields = ['user', 'course']
+    search_fields = ['user__username', 'course__title']
 
 # Сериализатор для уроков
 class LessonSerializer(serializers.ModelSerializer):

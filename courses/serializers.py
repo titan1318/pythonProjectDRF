@@ -2,6 +2,16 @@ from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Avg
 from .models import Course, Lesson, Rating
+from rest_framework import serializers
+from .models import Payment
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['id', 'user', 'course', 'amount', 'payment_date']
+        read_only_fields = ['user']
+
+
 
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
