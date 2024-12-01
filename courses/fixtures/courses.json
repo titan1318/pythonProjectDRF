@@ -1,0 +1,12 @@
+[
+    {
+        "model": "courses.course",
+        "pk": 1,
+        "fields": {
+            "title": "Тестовый курс",
+            "description": "Описание тестового курса",
+            "preview": "",
+            "creator": 1
+        }
+    }
+]

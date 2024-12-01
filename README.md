@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Задание:
    Опишите Dockerfile для запуска контейнера с проектом.
    Оберните в Docker Compose Django-проект с БД PostgreSQL.
@@ -29,3 +30,6 @@ $ docker-compose up -d --build
 Теперь к приложению можно обращаться через http://localhost:8000/
 
 4. В браузере по адресу http://localhost:8000/swagger/ можно ознакомиться с описанием API.
+=======
+# pythonProjectDRF
+>>>>>>> 189608c909cf437c2d8bfea0aafa445bf4172ede
