@@ -1,5 +1,5 @@
 """
-WSGI config for my_project project.
+WSGI config for config project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -8,6 +8,9 @@ https://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/
 """
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from django.core.wsgi import get_wsgi_application
 
