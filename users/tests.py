@@ -1,7 +1,14 @@
+<<<<<<< HEAD
+
+=======
 from django.test import TestCase
+<<<<<<< HEAD
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
 from rest_framework import status
+=======
+>>>>>>> 189608c909cf437c2d8bfea0aafa445bf4172ede
+>>>>>>> 9ff2f24294ef21ce0325f374f0cc082d46302804
 
 
 class UserViewTest(APITestCase):

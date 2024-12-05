@@ -1,0 +1,12 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "email": "shipxena@gmail.com",
+      "phone": null,
+      "avatar": "",
+      "city": "Moscow"
+    }
+  }
+]
