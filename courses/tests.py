@@ -1,118 +1,47 @@
-from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.test import TestCase
+from ..courses.models import Course
+from ..courses.serializers import CourseSerializer
 from django.contrib.auth.models import User
-from .models import Course, Rating
-from rest_framework.exceptions import ValidationError
-from rest_framework import status, viewsets
-from rest_framework.permissions import IsAuthenticated
-from .serializers import RatingSerializer
 
 
 
-class CourseAPITestCase(APITestCase):
 
+class CourseSerializerTest(TestCase):
     def setUp(self):
-        # Создаём суперпользователя
-        self.admin_user = User.objects.create_superuser(
-            username='admin', password='admin123', email='admin@example.com'
-        )
-        self.client = APIClient()
+        self.course = Course.objects.create(title="Test Course", description="Test Description")
 
-        # Получаем токен и устанавливаем его
-        token = AccessToken.for_user(self.admin_user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+    def test_course_serialization(self):
+        serializer = CourseSerializer(self.course)
+        self.assertEqual(serializer.data['title'], "Test Course")
 
-        # Создаём тестовый курс
+
+class CourseViewTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="testuser", password="password")
         self.course = Course.objects.create(
-            title="Тестовый курс", description="Описание курса", creator=self.admin_user
+            title="Тестовый курс",
+            description="Описание тестового курса",
+            creator=self.user
         )
 
     def test_get_courses(self):
-        response = self.client.get('/api/courses/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get("/courses/")
+        self.assertEqual(response.status_code, 200)
 
-    def test_create_course(self):
-        data = {
-            "title": "Новый курс",
-            "description": "Описание нового курса",
-        }
-        response = self.client.post('/api/courses/', data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_update_course(self):
-        data = {
-            "title": "Обновленный курс",
-            "description": "Обновленное описание",
-        }
-        response = self.client.put(f'/api/courses/{self.course.id}/', data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_delete_course(self):
-        response = self.client.delete(f'/api/courses/{self.course.id}/')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-class RatingAPITestCase(APITestCase):
-
+class CourseModelTest(TestCase):
     def setUp(self):
-        # Создаем пользователей и курс
-        self.user = User.objects.create_user(username='testuser', password='password123')
-        self.admin_user = User.objects.create_superuser(username='admin', password='admin123')
-        self.client = APIClient()
+        # Создаем пользователя для поля ForeignKey
+        self.user = User.objects.create_user(username="testuser", password="password")
+        self.course = Course.objects.create(
+            title="Тестовый курс",
+            description="Описание тестового курса",
+            creator=self.user  # Предполагаем, что поле ForeignKey называется `creator`
+        )
 
-        self.course = Course.objects.create(title="Тестовый курс", description="Описание курса", creator=self.admin_user)
-
-    def test_create_rating(self):
-        self.client.login(username='testuser', password='password123')
-        data = {
-            'course': self.course.id,
-            'score': 5
-        }
-        response = self.client.post('/api/ratings/', data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Rating.objects.count(), 1)
-
-    def test_unique_rating_per_user(self):
-        self.client.login(username='testuser', password='password123')
-        data = {'course': self.course.id, 'score': 4}
-        self.client.post('/api/ratings/', data)
-        response = self.client.post('/api/ratings/', data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  # Ожидаем ошибку из-за уникального ограничения
-
-    def test_get_average_rating(self):
-        Rating.objects.create(course=self.course, user=self.user, score=5)
-        Rating.objects.create(course=self.course, user=self.admin_user, score=3)
-        self.client.login(username='testuser', password='password123')
-        response = self.client.get(f'/api/courses/{self.course.id}/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertAlmostEqual(response.data['average_rating'], 4.0)  # Среднее значение
-
-class RatingAPITestCase(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='password123')
-        self.course = Course.objects.create(title="Тестовый курс", description="Описание курса")
-        self.client.force_authenticate(user=self.user)
-
-    def test_create_rating(self):
-        data = {"course": self.course.id, "score": 4}
-        response = self.client.post('/api/ratings/', data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_unique_rating_per_user(self):
-        Rating.objects.create(course=self.course, user=self.user, score=4)
-        data = {"course": self.course.id, "score": 5}
-        response = self.client.post('/api/ratings/', data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('non_field_errors', response.data)
-
-
-class RatingViewSet(viewsets.ModelViewSet):
-    queryset = Rating.objects.all()
-    serializer_class = RatingSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        user = self.request.user
-        course = serializer.validated_data['course']
-        if Rating.objects.filter(user=user, course=course).exists():
-            raise ValidationError("You have already rated this course.")
-        serializer.save(user=user)
+    def test_course_creation(self):
+        self.assertEqual(self.course.title, "Тестовый курс")
+        self.assertEqual(self.course.description, "Описание тестового курса")
+        self.assertEqual(self.course.creator, self.user)

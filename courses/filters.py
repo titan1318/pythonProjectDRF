@@ -1,5 +1,7 @@
 from django_filters import rest_framework as filters
 from .models import Course
+from django.db.models import Count
+
 
 class CourseFilter(filters.FilterSet):
     min_lesson_count = filters.NumberFilter(method='filter_by_min_lesson_count')
@@ -10,7 +12,7 @@ class CourseFilter(filters.FilterSet):
         fields = []
 
     def filter_by_min_lesson_count(self, queryset, name, value):
-        return queryset.annotate(lesson_count=models.Count('lessons')).filter(lesson_count__gte=value)
+        return queryset.annotate(lesson_count=Count('lessons')).filter(lesson_count__gte=value)
 
     def filter_by_max_lesson_count(self, queryset, name, value):
-        return queryset.annotate(lesson_count=models.Count('lessons')).filter(lesson_count__lte=value)
+        return queryset.annotate(lesson_count=Count('lessons')).filter(lesson_count__lte=value)

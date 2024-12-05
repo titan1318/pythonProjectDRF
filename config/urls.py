@@ -8,6 +8,7 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from payments.views import StripePaymentView, StripeSessionStatusView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -18,11 +19,12 @@ urlpatterns = [
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/payments/', include('payments.urls')),
-    path('api/', include('courses.urls')),
     path('api/users/', include('users.urls')),
-
+    path('api/payments/stripe/create/', StripePaymentView.as_view(), name='stripe-create'),
+    path('api/payments/stripe/status/', StripeSessionStatusView.as_view(), name='stripe-status'),
+    path('api/payments/stripe/create/', StripePaymentView.as_view(), name='stripe-create'),
+    path('api/payments/stripe/status/', StripeSessionStatusView.as_view(), name='stripe-status'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
