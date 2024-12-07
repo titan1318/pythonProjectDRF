@@ -1,22 +1,21 @@
-from django.contrib.auth.models import User
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
-class UserSerializer(serializers.ModelSerializer):
+from users.models import User, Payment
+
+
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'is_staff', 'is_active']
+        fields = '__all__'
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
 
+class UserNotOwnerSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'is_staff', 'is_active']
+        fields = ("id", "email", "date_joined")
 
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-        )
-        return user
+
+class PaymentSerializer(ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'

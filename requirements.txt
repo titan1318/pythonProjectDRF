@@ -60,4 +60,5 @@ zipp==3.20.2
 python-decouple
 django-extensions
 drf-spectacular
+forex-python==1.8
 

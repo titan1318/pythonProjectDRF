@@ -1,0 +1,108 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$rJntz0foi441rjuXLEwoWi$i4v/Nn6mBVXxf7K/zqqFWWZ+f+cIKLlfLoPAtj8KNuc=",
+      "last_login": "2024-11-17T13:31:00.259Z",
+      "is_superuser": true,
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-11-13T16:55:20.806Z",
+      "email": "admin@admin.ru",
+      "first_name": "Admin",
+      "phone": null,
+      "city": null,
+      "avatar": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$HM5XulAPbss6PYSyF9u8WZ$r51P8mCO+cuwBH4BNkdxeX2RZXRmsWeSvkcnbR1gfcw=",
+      "last_login": null,
+      "is_superuser": false,
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-11-13T17:10:47Z",
+      "email": "test1@test.ru",
+      "first_name": "test1",
+      "phone": null,
+      "city": null,
+      "avatar": "",
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$S8WukOjDjlHcEs1YzudobT$lGfscqPB5Wv2OGYcJnSKI+qAOx81uVtulX8db/KxF74=",
+      "last_login": null,
+      "is_superuser": false,
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-11-17T12:57:37.694Z",
+      "email": "test3@test.ru",
+      "first_name": null,
+      "phone": null,
+      "city": null,
+      "avatar": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$WkgP3NnFBetij3Mgn9Efl1$jkfZFE8xOmPgxHTz9zbuOcJ+Is24F9SpCGuULPCduNE=",
+      "last_login": null,
+      "is_superuser": false,
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-11-17T13:52:09.647Z",
+      "email": "test2@test.ru",
+      "first_name": null,
+      "phone": null,
+      "city": null,
+      "avatar": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.payment",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "payment_date": "2024-11-13",
+      "payment_course": 1,
+      "payment_lesson": null,
+      "price": 5000,
+      "payment_method": "cash"
+    }
+  },
+  {
+    "model": "users.payment",
+    "pk": 3,
+    "fields": {
+      "user": 2,
+      "payment_date": "2024-11-12",
+      "payment_course": 2,
+      "payment_lesson": null,
+      "price": 10000,
+      "payment_method": "cash"
+    }
+  }
+]

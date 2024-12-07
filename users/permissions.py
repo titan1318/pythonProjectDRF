@@ -1,34 +1,26 @@
-<<<<<<< HEAD
-from rest_framework.permissions import BasePermission
+from rest_framework import permissions
 
 
-class IsModerator(BasePermission):
+class IsModer(permissions.BasePermission):
+    """Проверка, является ли пользователь модератором."""
 
     def has_permission(self, request, view):
         return request.user.groups.filter(name="moders").exists()
 
 
-class IsOwner(BasePermission):
+class IsOwner(permissions.BasePermission):
+    """Проверка, является ли пользователь владельцем."""
 
     def has_object_permission(self, request, view, obj):
-        if request.user.is_staff:
+        if obj.owner == request.user:
             return True
-
-        return request.user == view.get_object().owner
-=======
+        return False
 
 
-from rest_framework.permissions import BasePermission
+class IsUser(permissions.BasePermission):
+    """Проверка, совпадает ли почта объекта, к которому осуществляется доступ, с почтой текущего пользователя."""
 
-class IsModerator(BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.groups.filter(name='Модераторы').exists()
-
-class IsAdminOrModeratorEditOnly(BasePermission):
-    def has_permission(self, request, view):
-        if request.method in ['PUT', 'PATCH']:
-            return request.user.is_authenticated and (
-                request.user.is_staff or request.user.groups.filter(name='Модераторы').exists()
-            )
-        return request.method in ['GET']
->>>>>>> 189608c909cf437c2d8bfea0aafa445bf4172ede
+    def has_object_permission(self, request, view, obj):
+        if obj.email == request.user.email:
+            return True
+        return False

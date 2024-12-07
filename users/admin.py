@@ -1,14 +1,14 @@
 from django.contrib import admin
-<<<<<<< HEAD
-from users.models import User
+
+from users.models import User, Payment
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'city', 'phone')
-    list_filter = ('email', 'phone',)
-    search_fields = ('email', 'phone', 'city',)
-=======
+    list_display = ('email', 'first_name', 'pk',)
 
-# Register your models here.
->>>>>>> 189608c909cf437c2d8bfea0aafa445bf4172ede
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'date_payment', 'course', 'lesson', 'amount', 'method_payment')
+    list_filter = ('user', 'date_payment', 'course', 'lesson', 'amount', 'method_payment')
